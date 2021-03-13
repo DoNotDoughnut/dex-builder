@@ -1,2 +1,7 @@
 /target
 Cargo.lock
+
+/pokemon
+/moves
+/textures
+/dex.bin
