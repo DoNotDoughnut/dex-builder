@@ -4,4 +4,6 @@ Cargo.lock
 /pokemon
 /moves
 /textures
-/dex.bin
+/icon
+
+/output
