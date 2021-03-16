@@ -38,7 +38,7 @@ pub fn build_dex(pokemon_dir: &str, move_dir: &str, textures_dir: &str, save_fil
                 if name.starts_with("deo") {
                     File::open(icon.join("deoxys.png"))?.read_to_end(&mut icon_png)?;
                 } else {
-                    File::open(icon.join(img.replace("-", "_")))?;
+                    File::open(icon.join(img.replace("-", "_")))?.read_to_end(&mut icon_png)?;
                 }
             }
         }
