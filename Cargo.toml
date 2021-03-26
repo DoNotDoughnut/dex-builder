@@ -1,6 +1,6 @@
 [package]
 name = "dex-builder"
-version = "0.3.0-beta.1"
+version = "0.3.0-beta.2"
 authors = ["Rhys Holloway <rhyswilliamholloway@gmail.com>"]
 edition = "2018"
 
@@ -14,8 +14,8 @@ edition = "2018"
 
 ### Pokemon specifications
 
-firecore-pokedex = { git = "https://github.com/DoNotDoughnut/firecore-pokedex" }
-#firecore-pokedex = { path = "../../firecore/firecore-pokedex" }
+#firecore-pokedex = { git = "https://github.com/DoNotDoughnut/firecore-pokedex" }
+firecore-pokedex-lib = { path = "../../firecore/firecore-pokedex-lib" }
 
 ### Serialization
 

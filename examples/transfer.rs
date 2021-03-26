@@ -41,35 +41,7 @@ fn main() {
         };
 
         copy(icon_path, folder.join("icon.png")).unwrap();
-
-
-        // let path = entry.path();
-        // // let data = std::fs::read_to_string(path)?;
-        // // let pokemon_entry: Pokemon = toml::from_str(&data)?;
-        // let name = pokemon_entry.data.name.to_ascii_lowercase();
-        // println!("{}: {:?}", name, entry.path().file_stem().unwrap());
-        // let mut front_png = Vec::new();
-        // let mut back_png = Vec::new();
-        // let mut icon_png = Vec::new();
-        // let img = name.clone() + ".png";
-        // println!("{:?}", icon.join(&img));
-        // File::open()?.read_to_end(&mut front_png)?;
-        // File::open(base.join("back").join(&img))?.read_to_end(&mut back_png)?;
-        // match File::open(icon.join(&img)) {
-        //     Ok(mut file) => {
-        //         file.read_to_end(&mut icon_png)?;
-        //     }
-        //     Err(_) => {
-        //         if name.starts_with("deo") {
-        //             File::open(icon.join("deoxys.png"))?.read_to_end(&mut icon_png)?;
-        //         } else {
-        //             File::open()?.read_to_end(&mut icon_png)?;
-        //         }
-        //     }
-        // }
         
     }
-
-    // Ok(())
 
 }
