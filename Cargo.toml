@@ -1,6 +1,6 @@
 [package]
 name = "dex-builder"
-version = "0.1.0"
+version = "0.3.0-beta.1"
 authors = ["Rhys Holloway <rhyswilliamholloway@gmail.com>"]
 edition = "2018"
 
@@ -8,15 +8,16 @@ edition = "2018"
 
 # [features]
 # default = []
-# pret = []
+# generate = []
 
 [dependencies]
 
-# Pokemon specifications
+### Pokemon specifications
 
 firecore-pokedex = { git = "https://github.com/DoNotDoughnut/firecore-pokedex" }
+#firecore-pokedex = { path = "../../firecore/firecore-pokedex" }
 
-# Serialization
+### Serialization
 
 serde = { version = "1.0", features = ["derive"] }
 bincode = "1.3"

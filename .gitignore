@@ -1,9 +1,7 @@
 /target
 Cargo.lock
 
-/pokemon
-/moves
-/textures
 /icon
+/pokedex
 
 /output
