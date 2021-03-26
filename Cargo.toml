@@ -14,8 +14,8 @@ edition = "2018"
 
 ### Pokemon specifications
 
-#firecore-pokedex = { git = "https://github.com/DoNotDoughnut/firecore-pokedex" }
-firecore-pokedex-lib = { path = "../../firecore/firecore-pokedex-lib" }
+firecore-pokedex = { git = "https://github.com/DoNotDoughnut/firecore-pokedex" }
+#firecore-pokedex-lib = { path = "../../firecore/firecore-pokedex-lib" }
 
 ### Serialization
 
