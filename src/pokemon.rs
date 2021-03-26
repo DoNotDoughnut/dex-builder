@@ -57,8 +57,8 @@ fn find_entry_file(dir_path: &PathBuf) -> Result<Pokemon, EntryError> {
         let file = file_entry?.path();
         if let Some(ext) = file.extension() {
             if ext == std::ffi::OsString::from("toml") {
-                let data = std::fs::read_to_string(file)?;
-                return Ok(toml::from_str(&data)?);
+                let data = std::fs::read_to_string(&file)?;
+                return Ok(toml::from_str(&data).map_err(|err| EntryError::ParseError(file.to_string_lossy().to_string(), err))?);
             }
         }
     }

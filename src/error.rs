@@ -6,19 +6,13 @@ use bincode::Error as SerializeError;
 pub enum EntryError {
     NoEntry,
     IoError(IoError),
-    ParseError(ParseError),
+    ParseError(String, ParseError),
     SerializeError(SerializeError),
 }
 
 impl From<IoError> for EntryError {
     fn from(err: IoError) -> Self {
         Self::IoError(err)
-    }
-}
-
-impl From<ParseError> for EntryError {
-    fn from(err: ParseError) -> Self {
-        Self::ParseError(err)
     }
 }
 
