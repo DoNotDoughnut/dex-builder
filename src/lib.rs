@@ -18,7 +18,7 @@ pub fn compile(pokemon_dir: &str, move_dir: &str, save_file: &str, include_audio
     
 
     let size = file.write(
-        &bincode::serialize(
+        &postcard::to_allocvec(
             &firecore_pokedex_lib::serialized::SerializedDex {
                 pokemon,
                 moves

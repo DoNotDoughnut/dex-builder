@@ -1,6 +1,6 @@
 use std::io::Error as IoError;
 use toml::de::Error as ParseError;
-use bincode::Error as SerializeError;
+use postcard::Error as SerializeError;
 
 #[derive(Debug)]
 pub enum EntryError {
