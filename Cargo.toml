@@ -12,10 +12,10 @@ gen = []
 
 ### Pokemon specifications
 
-firecore-pokedex-game = { path = "../game" }
-firecore-dependencies = { path = "../../firecore/deps", features = ["ser"] }
+firecore-pokedex-game = { git="https://github.com/DoNotDoughnut/firecore-pokedex-game" }
+firecore-dependencies = { git="https://github.com/DoNotDoughnut/firecore-dependencies", features=["ser"] }
 
 ### Serialization
 
-serde = { version = "1.0", features = ["derive"] }
+serde = { version="1.0", features=["derive"] }
 ron = "0.6"
