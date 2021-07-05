@@ -1,11 +1,8 @@
 use std::time::Instant;
 
-use dex_builder::error::EntryError;
-
-fn main() -> Result<(), EntryError> {
+fn main() {
     println!("Building dex...");
     let start = Instant::now();
-    let bytes = dex_builder::compile("pokedex/pokemon", "pokedex/moves", "output/dex.bin", false)?;
-    println!("Wrote {} bytes in {}ms!", bytes, start.elapsed().as_millis());
-    Ok(())
+    dex_builder::compile("assets/pokedex/pokemon", "assets/pokedex/moves", "assets/pokedex/items", "assets/pokedex/trainers", Some("output/dex.bin"), false);
+    println!("Finished in {}ms!", start.elapsed().as_millis());
 }

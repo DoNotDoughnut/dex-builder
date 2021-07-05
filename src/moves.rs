@@ -1,14 +1,70 @@
-use firecore_pokedex_lib::moves::PokemonMove;
+use std::fs::{read_dir, read_to_string};
+use std::path::PathBuf;
 
-use crate::error::EntryError;
+use pokedex::{
+    battle2::serialized::SerializedBattleMoveFile, moves::Move, serialize::SerializedMove,
+};
 
-pub fn get_moves(move_dir: &str) -> Result<Vec<PokemonMove>, EntryError> {
-    let mut moves = Vec::with_capacity(334);
-    for entry in std::fs::read_dir(move_dir)? {
-        let path = entry?.path();
-        let data = std::fs::read_to_string(&path)?;
-        let pokemon_move = toml::from_str(&data).map_err(|err| EntryError::ParseError(path.to_string_lossy().to_string(), err))?;
-        moves.push(pokemon_move);
+pub fn get_moves<P: AsRef<std::path::Path>>(move_dir: P) -> Vec<SerializedMove> {
+    let move_dir = move_dir.as_ref();
+    read_dir(move_dir)
+        .unwrap_or_else(|err| {
+            panic!(
+                "Could not read moves directory at {:?} with error {}",
+                move_dir, err
+            )
+        })
+        .map(|entry| match entry.map(|entry| entry.path()) {
+            Ok(path) => Some(if path.is_dir() {
+                from_dir(path)
+            } else {
+                SerializedMove::from(from_file(path))
+            }),
+            Err(err) => {
+                eprintln!("Could not read directory entry with error {}", err);
+                None
+            }
+        })
+        .flatten()
+        .collect()
+}
+
+fn from_dir(dir: PathBuf) -> SerializedMove {
+    let move_path = dir.join("move.ron");
+    let battle_path = dir.join("battle.ron");
+
+    SerializedMove {
+        pokemon_move: ron::from_str::<Move>(&read_to_string(&move_path).unwrap_or_else(|err| {
+            panic!(
+                "Could not read move file at {:?} to string with error {}",
+                move_path, err
+            )
+        }))
+        .unwrap_or_else(|err| {
+            panic!(
+                "Could not parse move file at {:?} with error {}",
+                move_path, err
+            )
+        }),
+        battle_move: read_to_string(&battle_path).ok().map(|data| {
+            ron::from_str::<SerializedBattleMoveFile>(&data)
+                .unwrap_or_else(|err| {
+                    panic!(
+                        "Could not parse move battle file at {:?} with error {}",
+                        battle_path, err
+                    )
+                })
+                .into(dir)
+        }),
     }
-    Ok(moves)
+}
+
+fn from_file(path: PathBuf) -> Move {
+    ron::from_str(&read_to_string(&path).unwrap_or_else(|err| {
+        panic!(
+            "Could not read move file at {:?} to string with error {}",
+            path, err
+        )
+    }))
+    .unwrap_or_else(|err| panic!("Could not parse move file at {:?} with error {}", path, err))
 }
