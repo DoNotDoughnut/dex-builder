@@ -1,4 +1,4 @@
-extern crate firecore_pokedex_game as pokedex;
+extern crate firecore_pokedex_client as pokedex;
 
 use std::fs::File;
 use std::io::Write;

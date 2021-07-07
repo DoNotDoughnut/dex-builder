@@ -12,7 +12,7 @@ gen = []
 
 ### Pokemon specifications
 
-firecore-pokedex-game = { git="https://github.com/DoNotDoughnut/firecore-pokedex-game" }
+firecore-pokedex-client = { git="https://github.com/DoNotDoughnut/firecore-pokedex-client" }
 firecore-dependencies = { git="https://github.com/DoNotDoughnut/firecore-dependencies", features=["ser"] }
 
 ### Serialization
