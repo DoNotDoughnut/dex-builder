@@ -1,9 +1,8 @@
+use pokedex::{
+    battle_move::serialized::SerializedBattleMoveFile, moves::Move, serialize::SerializedMove,
+};
 use std::fs::{read_dir, read_to_string};
 use std::path::PathBuf;
-
-use pokedex::{
-    battle2::serialized::SerializedBattleMoveFile, moves::Move, serialize::SerializedMove,
-};
 
 pub fn get_moves<P: AsRef<std::path::Path>>(move_dir: P) -> Vec<SerializedMove> {
     let move_dir = move_dir.as_ref();
