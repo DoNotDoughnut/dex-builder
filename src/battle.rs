@@ -15,21 +15,25 @@ pub fn get_battle_moves<P: AsRef<Path>>(battle: P) -> Vec<SerializedBattleMoveBy
             read_dir(&path).unwrap_or_else(|err| panic!("Could not read battle move directory at {:?} with error {}", path, err))
         })
         .flatten()
-        .map(|d| {
+        .flat_map(|d| {
             let path = d.path();
-            let string = read_to_string(&path).unwrap_or_else(|err| {
-                panic!(
-                    "Could not read battle move at {:?} to string with error {}",
-                    path, err
-                )
-            });
-            ron::from_str::<SerializedBattleMoveFile>(&string)
-                .unwrap_or_else(|err| {
+            if path.extension().map(|s| s.to_str()).flatten() == Some("ron") {
+                let string = read_to_string(&path).unwrap_or_else(|err| {
                     panic!(
-                        "Could not parse move battle file at {:?} with error {}",
+                        "Could not read battle move at {:?} to string with error {}",
                         path, err
                     )
-                })
-                .into(path)
+                });
+                Some(ron::from_str::<SerializedBattleMoveFile>(&string)
+                    .unwrap_or_else(|err| {
+                        panic!(
+                            "Could not parse move battle file at {:?} with error {}",
+                            path, err
+                        )
+                    })
+                    .into(path))
+            } else {
+                None
+            }
         }).collect()
 }
