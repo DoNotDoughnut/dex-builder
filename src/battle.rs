@@ -12,10 +12,10 @@ pub fn get_battle_moves<P: AsRef<Path>>(battle: P) -> Vec<SerializedBattleMoveBy
         .filter(|d| d.path().is_dir())
         .flat_map(|d| {
             let path = d.path();
-            read_dir(&path).unwrap_or_else(|err| panic!("Could not read battle move directory at {:?} with error {}", path, err))
+            read_dir(&path).unwrap_or_else(|err| panic!("Could not read battle move directory at {:?} with error {}", &path, err)).map(move |d| d.map(|d| (d, path.clone())))
         })
         .flatten()
-        .flat_map(|d| {
+        .flat_map(|(d, folder)| {
             let path = d.path();
             if path.extension().map(|s| s.to_str()).flatten() == Some("ron") {
                 let string = read_to_string(&path).unwrap_or_else(|err| {
@@ -31,7 +31,7 @@ pub fn get_battle_moves<P: AsRef<Path>>(battle: P) -> Vec<SerializedBattleMoveBy
                             path, err
                         )
                     })
-                    .into(path))
+                    .into(folder))
             } else {
                 None
             }
