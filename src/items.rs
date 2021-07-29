@@ -1,7 +1,9 @@
 use std::path::PathBuf;
 
-use pokedex::item::Item;
-use pokedex::serialize::SerializedItem;
+use pokedex::{
+    item::Item,
+    serialize::SerializedItem,
+};
 
 pub fn get_items<P: AsRef<std::path::Path>>(item_dir: P) -> Vec<SerializedItem> {
     let item_dir = item_dir.as_ref();

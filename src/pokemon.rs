@@ -1,13 +1,12 @@
-use std::fs::{read, read_dir, read_to_string};
+use std::{
+    fs::{read, read_dir, read_to_string},
+    path::Path,
+};
 
-use pokedex::pokemon::Pokemon;
-use pokedex::serialize::SerializedPokemon;
+use pokedex::{pokemon::Pokemon, serialize::SerializedPokemon};
 
-pub fn get_pokemon<P: AsRef<std::path::Path>>(
-    pokemon_dir: P,
-    include_audio: bool,
-) -> Vec<SerializedPokemon> {
-    let pokemon_dir = pokemon_dir.as_ref();
+pub fn get_pokemon<P: AsRef<Path>>(pokemon: P) -> Vec<SerializedPokemon> {
+    let pokemon_dir = pokemon.as_ref();
     let mut pokemon = Vec::new();
     for entry in read_dir(pokemon_dir).unwrap_or_else(|err| {
         panic!(
@@ -34,29 +33,29 @@ pub fn get_pokemon<P: AsRef<std::path::Path>>(
                             )
                         });
 
-                    let front_png = read(dir.join("normal_front.png")).unwrap_or_else(|err| {
+                    let front = read(dir.join("normal_front.png")).unwrap_or_else(|err| {
                         panic!(
                             "Could not read front texture file for pokemon {} with error {}",
                             pokemon_entry.name, err
                         )
                     });
 
-                    let back_png = read(dir.join("normal_back.png")).unwrap_or_else(|err| {
+                    let back = read(dir.join("normal_back.png")).unwrap_or_else(|err| {
                         panic!(
                             "Could not read back texture file for pokemon {} with error {}",
                             pokemon_entry.name, err
                         )
                     });
 
-                    let icon_png = read(dir.join("icon.png")).unwrap_or_else(|err| {
+                    let icon = read(dir.join("icon.png")).unwrap_or_else(|err| {
                         panic!(
                             "Could not read icon file for pokemon {} with error {}",
                             pokemon_entry.name, err
                         )
                     });
 
-                    let cry_ogg = {
-                        if include_audio {
+                    let cry = {
+                        if cfg!(feature = "audio") {
                             read(dir.join("cry.ogg")).ok().unwrap_or_default()
                         } else {
                             Vec::new()
@@ -65,10 +64,10 @@ pub fn get_pokemon<P: AsRef<std::path::Path>>(
 
                     pokemon.push(SerializedPokemon {
                         pokemon: pokemon_entry,
-                        cry_ogg,
-                        front_png,
-                        back_png,
-                        icon_png,
+                        cry,
+                        front,
+                        back,
+                        icon,
                     });
                 }
             }
