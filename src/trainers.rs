@@ -3,7 +3,7 @@ use std::{
     path::Path,
 };
 
-use pokedex::{serialize::SerializedTrainers, trainer::TrainerId};
+use pokedex::serialize::SerializedTrainers;
 
 pub fn get_trainers(trainer_dir: impl AsRef<Path>) -> SerializedTrainers {
     read_dir(trainer_dir)
@@ -11,7 +11,7 @@ pub fn get_trainers(trainer_dir: impl AsRef<Path>) -> SerializedTrainers {
         .flatten()
         .map(|d| {
             (
-                TrainerId::new(d.file_name()
+                d.file_name()
                     .to_string_lossy()
                     .split('.')
                     .next()
@@ -28,7 +28,7 @@ pub fn get_trainers(trainer_dir: impl AsRef<Path>) -> SerializedTrainers {
                             d.file_name(),
                             err
                         )
-                    })),
+                    }),
                 read(d.path()).unwrap_or_else(|err| {
                     panic!("Could not read trainer texture entry with error {}", err)
                 }),

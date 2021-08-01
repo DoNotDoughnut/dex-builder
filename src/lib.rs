@@ -1,5 +1,5 @@
 pub extern crate bincode as ser;
-pub extern crate firecore_pokedex_client as pokedex;
+pub extern crate firecore_pokedex_engine as pokedex;
 
 use std::{fs::write, path::Path};
 
