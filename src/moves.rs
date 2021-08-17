@@ -25,16 +25,21 @@ pub fn get_moves<U: DeserializeOwned + Serialize, P: AsRef<Path>>(moves: P) -> (
             })
             .flat_map(|entry| match entry.map(|entry| entry.path()) {
                 Ok(path) => {
-                    let m = ron::from_str::<Move<U>>(&read_to_string(&path).unwrap_or_else(|err| {
-                        panic!(
-                            "Could not read move file at {:?} to string with error {}",
-                            path, err
-                        )
-                    }))
-                    .unwrap_or_else(|err| {
-                        panic!("Could not parse move file at {:?} with error {}", path, err)
-                    });
-                    Some((m.id, m))
+                    match path.is_file() {
+                        true => {
+                            let m = ron::from_str::<Move<U>>(&read_to_string(&path).unwrap_or_else(|err| {
+                                panic!(
+                                    "Could not read move file at {:?} to string with error {}",
+                                    path, err
+                                )
+                            }))
+                            .unwrap_or_else(|err| {
+                                panic!("Could not parse move file at {:?} with error {}", path, err)
+                            });
+                            Some((m.id, m))
+                        }
+                        false => None,
+                    }
                 }
                 Err(err) => {
                     eprintln!("Could not read directory entry with error {}", err);

@@ -15,8 +15,9 @@ pub fn get_items<P: AsRef<Path>>(path: P) -> Dex<Item> {
             )
         })
         .flatten()
-        .map(|entry| {
-            let path = entry.path();
+        .map(|entry| entry.path())
+        .filter(|path| path.is_file())
+        .map(|path| {
             let i = ron::from_str::<Item>(&read_to_string(&path).unwrap_or_else(|err| {
                 panic!(
                     "Could not read item entry at {:?} to string with error {}",
