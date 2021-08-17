@@ -1,14 +1,18 @@
-use battle::{
-    moves::Move,
-    pokedex::{moves::MoveId, Dex},
-};
+use serde::{de::DeserializeOwned, Serialize};
 use hashbrown::HashMap;
 use std::{
     fs::{read_dir, read_to_string},
     path::Path,
 };
 
-pub fn get_moves<P: AsRef<Path>>(moves: P) -> (Dex<Move>, HashMap<MoveId, String>) {
+use pokedex::{
+    moves::{Move, MoveId},
+    Dex,
+};
+
+pub type Scripts = HashMap<MoveId, String>;
+
+pub fn get_moves<U: DeserializeOwned + Serialize, P: AsRef<Path>>(moves: P) -> (Dex<Move<U>>, Scripts) {
     let move_dir = moves.as_ref();
 
     let moves = Dex::new(
@@ -21,7 +25,7 @@ pub fn get_moves<P: AsRef<Path>>(moves: P) -> (Dex<Move>, HashMap<MoveId, String
             })
             .flat_map(|entry| match entry.map(|entry| entry.path()) {
                 Ok(path) => {
-                    let m = ron::from_str::<Move>(&read_to_string(&path).unwrap_or_else(|err| {
+                    let m = ron::from_str::<Move<U>>(&read_to_string(&path).unwrap_or_else(|err| {
                         panic!(
                             "Could not read move file at {:?} to string with error {}",
                             path, err
@@ -37,7 +41,7 @@ pub fn get_moves<P: AsRef<Path>>(moves: P) -> (Dex<Move>, HashMap<MoveId, String
                     None
                 }
             })
-            .collect()
+            .collect(),
     );
 
     let scripts = read_dir(move_dir.join("scripts"))

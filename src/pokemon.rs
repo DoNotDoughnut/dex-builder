@@ -3,7 +3,7 @@ use std::{
     path::Path,
 };
 
-use battle::pokedex::{pokemon::Pokemon, Dex};
+use pokedex::{pokemon::Pokemon, Dex};
 
 pub fn get_pokemon<P: AsRef<Path>>(path: P) -> Dex<Pokemon> {
 

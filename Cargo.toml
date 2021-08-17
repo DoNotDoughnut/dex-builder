@@ -5,6 +5,10 @@ authors = ["Rhys Holloway <rhyswilliamholloway@gmail.com>"]
 edition = "2018"
 
 [dependencies]
-firecore-battle = { git = "https://github.com/DoNotDoughnut/firecore-battle", default-features = false }
+firecore-pokedex = { git = "https://github.com/DoNotDoughnut/firecore-pokedex" }
 ron = "0.6"
 hashbrown = "0.11"
+serde = "1"
+
+[dev-dependencies]
+firecore-battle = { git = "https://github.com/DoNotDoughnut/firecore-battle", default-features = false }
