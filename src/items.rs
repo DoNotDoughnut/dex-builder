@@ -1,41 +1,35 @@
-use std::path::PathBuf;
-
-use pokedex::{
-    item::Item,
-    serialize::SerializedItem,
+use std::{
+    fs::{read_dir, read_to_string},
+    path::Path,
 };
 
-pub fn get_items<P: AsRef<std::path::Path>>(item_dir: P) -> Vec<SerializedItem> {
-    let item_dir = item_dir.as_ref();
-    std::fs::read_dir(item_dir)
-        .unwrap_or_else(|err| panic!("Could not read item directory at {:?} with error {}", item_dir, err))
-            .map(|entry| 
-                entry.map(|entry| get_item_config(entry.path()))
-            ).flatten().flatten().collect()
-}
+use battle::pokedex::{item::Item, Dex};
 
-fn get_item_config(dir: PathBuf) -> Option<SerializedItem> {
-    if dir.is_dir() {
-        for entry in std::fs::read_dir(&dir).unwrap_or_else(|err| panic!("Could not read item entry directory at {:?} with error {}", dir, err)) {
-            match entry.map(|entry| entry.path()) {
-                Ok(path) => {
-                    if path.extension() == Some(&std::ffi::OsString::from("ron")) {
-                        let data = std::fs::read_to_string(&path).unwrap_or_else(|err| panic!("Could not read item entry at {:?} to string with error {}", path, err));
-                        let item: Item = ron::from_str(&data).unwrap_or_else(|err| panic!("Could not deserialize item entry at {:?} with error {}", path, err));
-                        let texture = std::fs::read(dir.join(item.id.to_string() + ".png")).unwrap_or_else(|err| panic!("Could not get texture for item id {:?} with error {}", item.id, err));
-                        return Some(SerializedItem {
-                            item,
-                            texture,
-                        });
-                    }                    
-                }
-                Err(err) => {
-                    eprintln!("Could not read directory item entry with error {}", err);
-                },
-            }
-        }
-        None
-    } else {
-        None
-    }
+pub fn get_items<P: AsRef<Path>>(path: P) -> Dex<Item> {
+    let path = path.as_ref();
+    Dex::new(read_dir(path)
+        .unwrap_or_else(|err| {
+            panic!(
+                "Could not read item directory at {:?} with error {}",
+                path, err
+            )
+        })
+        .flatten()
+        .map(|entry| {
+            let path = entry.path();
+            let i = ron::from_str::<Item>(&read_to_string(&path).unwrap_or_else(|err| {
+                panic!(
+                    "Could not read item entry at {:?} to string with error {}",
+                    path, err
+                )
+            }))
+            .unwrap_or_else(|err| {
+                panic!(
+                    "Could not deserialize item entry at {:?} with error {}",
+                    path, err
+                )
+            });
+            (i.id, i)
+        })
+        .collect())
 }
