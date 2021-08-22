@@ -6,7 +6,6 @@ use std::{
 use pokedex::{pokemon::Pokemon, Dex};
 
 pub fn get_pokemon<P: AsRef<Path>>(path: P) -> Dex<Pokemon> {
-
     let path = path.as_ref();
 
     let readdir = read_dir(path).unwrap_or_else(|err| {
@@ -16,25 +15,29 @@ pub fn get_pokemon<P: AsRef<Path>>(path: P) -> Dex<Pokemon> {
         )
     });
 
-    let pokemon = Dex::new(readdir.flatten().map(|entry| entry.path()).filter(|path| path.is_dir()).map(|dir| {
-        let file = dir.join("pokemon.ron");
+    let pokemon = Dex::new(
+        readdir
+            .flatten()
+            .map(|entry| entry.path())
+            .filter(|path| path.is_file())
+            .map(|file| {
+                let p = ron::from_str::<Pokemon>(&read_to_string(&file).unwrap_or_else(|err| {
+                    panic!(
+                        "Could not read pokemon file at {:?} to string with error {}",
+                        file, err
+                    )
+                }))
+                .unwrap_or_else(|err| {
+                    panic!(
+                        "Could not parse pokemon file at {:?} with error {}",
+                        file, err
+                    )
+                });
 
-        let p =
-            ron::from_str::<Pokemon>(&read_to_string(&file).unwrap_or_else(|err| {
-                panic!(
-                    "Could not read pokemon file at {:?} to string with error {}",
-                    file, err
-                )
-            }))
-            .unwrap_or_else(|err| {
-                panic!(
-                    "Could not parse pokemon file at {:?} with error {}",
-                    file, err
-                )
-            });
-
-        (p.id, p)
-    }).collect());
+                (p.id, p)
+            })
+            .collect(),
+    );
 
     println!("Loaded {} pokemon.", pokemon.len());
 
