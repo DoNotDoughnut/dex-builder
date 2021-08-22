@@ -1,4 +1,3 @@
-use serde::{de::DeserializeOwned, Serialize};
 use hashbrown::HashMap;
 use std::{
     fs::{read_dir, read_to_string},
@@ -12,7 +11,7 @@ use pokedex::{
 
 pub type Scripts = HashMap<MoveId, String>;
 
-pub fn get_moves<U: DeserializeOwned + Serialize, P: AsRef<Path>>(moves: P) -> (Dex<Move<U>>, Scripts) {
+pub fn get_moves<P: AsRef<Path>>(moves: P) -> (Dex<Move>, Scripts) {
     let move_dir = moves.as_ref();
 
     let moves = Dex::new(
@@ -27,7 +26,7 @@ pub fn get_moves<U: DeserializeOwned + Serialize, P: AsRef<Path>>(moves: P) -> (
                 Ok(path) => {
                     match path.is_file() {
                         true => {
-                            let m = ron::from_str::<Move<U>>(&read_to_string(&path).unwrap_or_else(|err| {
+                            let m = ron::from_str::<Move>(&read_to_string(&path).unwrap_or_else(|err| {
                                 panic!(
                                     "Could not read move file at {:?} to string with error {}",
                                     path, err
