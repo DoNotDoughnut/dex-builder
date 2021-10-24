@@ -2,7 +2,7 @@ pub extern crate firecore_pokedex as pokedex;
 
 use std::path::Path;
 
-use pokedex::{item::Item, moves::Move, pokemon::Pokemon, Dex};
+use pokedex::{item::Item, moves::Move, pokemon::Pokemon, BasicDex};
 
 pub mod items;
 pub mod moves;
@@ -12,7 +12,7 @@ pub fn compile<P: AsRef<Path>>(
     pokemon: P,
     moves: P,
     items: P,
-) -> (Dex<Pokemon>, Dex<Move>, Dex<Item>) {
+) -> (BasicDex<Pokemon>, BasicDex<Move>, BasicDex<Item>) {
     // #[cfg(feature = "gen")]
     // gen::gen(pokemon_dir, move_dir)
 

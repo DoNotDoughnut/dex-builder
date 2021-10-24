@@ -3,9 +3,9 @@ use std::{
     path::Path,
 };
 
-use pokedex::{pokemon::Pokemon, Dex};
+use pokedex::{pokemon::Pokemon, BasicDex, Dex};
 
-pub fn get_pokemon<P: AsRef<Path>>(path: P) -> Dex<Pokemon> {
+pub fn get_pokemon<P: AsRef<Path>>(path: P) -> BasicDex<Pokemon> {
     let path = path.as_ref();
 
     let readdir = read_dir(path).unwrap_or_else(|err| {
@@ -15,7 +15,7 @@ pub fn get_pokemon<P: AsRef<Path>>(path: P) -> Dex<Pokemon> {
         )
     });
 
-    let pokemon = Dex::new(
+    let pokemon = BasicDex::new(
         readdir
             .flatten()
             .map(|entry| entry.path())

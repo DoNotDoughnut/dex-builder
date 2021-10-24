@@ -1,9 +1,9 @@
 [package]
 name = "firecore-pokedex-builder"
-version = "0.5.0-2021-08-22"
-authors = ["Rhys Holloway <rhyswilliamholloway@gmail.com>"]
+version = "0.0.5"
+authors = ["Rhys H <donotdoughnut99@gmail.com>"]
 edition = "2018"
 
 [dependencies]
-firecore-pokedex = { git = "https://github.com/DoNotDoughnut/firecore-pokedex" }
+firecore-pokedex = "0.0.5"
 ron = "0.6"

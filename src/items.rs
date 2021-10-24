@@ -3,11 +3,11 @@ use std::{
     path::Path,
 };
 
-use pokedex::{item::Item, Dex};
+use pokedex::{item::Item, BasicDex};
 
-pub fn get_items<P: AsRef<Path>>(path: P) -> Dex<Item> {
+pub fn get_items<P: AsRef<Path>>(path: P) -> BasicDex<Item> {
     let path = path.as_ref();
-    Dex::new(read_dir(path)
+    BasicDex::new(read_dir(path)
         .unwrap_or_else(|err| {
             panic!(
                 "Could not read item directory at {:?} with error {}",

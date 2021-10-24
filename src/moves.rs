@@ -3,12 +3,12 @@ use std::{
     path::Path,
 };
 
-use pokedex::{moves::Move, Dex};
+use pokedex::{moves::Move, BasicDex};
 
-pub fn get_moves<P: AsRef<Path>>(moves: P) -> Dex<Move> {
+pub fn get_moves<P: AsRef<Path>>(moves: P) -> BasicDex<Move> {
     let move_dir = moves.as_ref();
 
-    Dex::new(
+    BasicDex::new(
         read_dir(move_dir)
             .unwrap_or_else(|err| {
                 panic!(
