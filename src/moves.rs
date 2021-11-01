@@ -5,7 +5,7 @@ use std::{
 
 use pokedex::{moves::Move, BasicDex};
 
-pub fn get_moves<P: AsRef<Path>>(moves: P) -> BasicDex<Move> {
+pub fn get_moves(moves: impl AsRef<Path>) -> BasicDex<Move> {
     let move_dir = moves.as_ref();
 
     BasicDex::new(

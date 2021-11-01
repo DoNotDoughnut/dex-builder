@@ -5,7 +5,7 @@ use std::{
 
 use pokedex::{pokemon::Pokemon, BasicDex, Dex};
 
-pub fn get_pokemon<P: AsRef<Path>>(path: P) -> BasicDex<Pokemon> {
+pub fn get_pokemon(path: impl AsRef<Path>) -> BasicDex<Pokemon> {
     let path = path.as_ref();
 
     let readdir = read_dir(path).unwrap_or_else(|err| {

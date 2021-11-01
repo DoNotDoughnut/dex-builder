@@ -8,10 +8,10 @@ pub mod items;
 pub mod moves;
 pub mod pokemon;
 
-pub fn compile<P: AsRef<Path>>(
-    pokemon: P,
-    moves: P,
-    items: P,
+pub fn compile(
+    pokemon: impl AsRef<Path>,
+    moves: impl AsRef<Path>,
+    items: impl AsRef<Path>,
 ) -> (BasicDex<Pokemon>, BasicDex<Move>, BasicDex<Item>) {
     // #[cfg(feature = "gen")]
     // gen::gen(pokemon_dir, move_dir)

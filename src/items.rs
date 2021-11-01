@@ -5,7 +5,7 @@ use std::{
 
 use pokedex::{item::Item, BasicDex};
 
-pub fn get_items<P: AsRef<Path>>(path: P) -> BasicDex<Item> {
+pub fn get_items(path: impl AsRef<Path>) -> BasicDex<Item> {
     let path = path.as_ref();
     BasicDex::new(read_dir(path)
         .unwrap_or_else(|err| {
